@@ -52,17 +52,18 @@ const MainFeature = () => {
 				)}
 			</div>
 			<ul className="space-y-4">
-				{products?.map((product: any) => (
-					<li key={product.id} className="border p-4 rounded-lg">
-						<strong>ID:</strong> {product.id}
-						<br />
-						<strong>Продукт:</strong> {product.product || 'dd'}
-						<br />
-						<strong>Цена:</strong> {`${product.price}₽` || 'ss'}
-						<br />
-						<strong>Бренд:</strong> {product.brand || 'N/A'}
-					</li>
-				))}
+				{products &&
+					products.map((product: any) => (
+						<li key={product.id} className="border p-4 rounded-lg">
+							<strong>Бренд:</strong> {product.brand || 'N/A'}
+							<br />
+							<strong>ID:</strong> {product.id}
+							<br />
+							<strong>Цена:</strong> {`${product.price}₽` || 'N/A'}
+							<br />
+							<strong>Продукт:</strong> {product.product || 'N/A'}
+						</li>
+					))}
 			</ul>
 			<div className="mt-4">
 				<Pagination

@@ -1,5 +1,5 @@
 import MainFeature from '../../features/main'
 
-export const MainPage = () => {
+export const ProductsListWidget = () => {
 	return <MainFeature />
 }

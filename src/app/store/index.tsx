@@ -1,8 +1,9 @@
 import { create } from 'zustand'
 import { fetchProducts, fetchTotalPages } from '../../entities/api'
+import { ProductsService } from '../../shared/api/services'
 
 interface State {
-	products?: any[]
+	products: []
 	currentPage: number
 	totalPages: number
 	searchTerm: string
@@ -24,10 +25,12 @@ const productStore = create<State & Actions>((set, get) => ({
 	fetchProductsAction: async () => {
 		set({ isLoading: true })
 		try {
-			const products = await fetchProducts(get().currentPage, get().searchTerm)
+			const products = await ProductsService.getProducts()
+			// get().currentPage,
+			// get().searchTerm,
+
 			set({ products })
-			const totalPages = await fetchTotalPages()
-			set({ totalPages, isLoading: false })
+			// const totalPages = await ProductsService.getTotalPages()
 		} catch (error) {
 			set({ isLoading: false })
 		}

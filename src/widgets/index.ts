@@ -1,0 +1,1 @@
+export { ProductsListWidget } from './products'
