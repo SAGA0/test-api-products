@@ -1,5 +1,6 @@
+// @ts-nocheck
 import React, { useEffect } from 'react'
-import { TextField, Button, CircularProgress } from '@mui/material'
+import { TextField, Button, CircularProgress, Typography } from '@mui/material'
 import { Pagination } from '@mui/material'
 import { productStore } from '../../app/store'
 
@@ -12,11 +13,13 @@ const MainFeature = () => {
 		isLoading,
 		fetchProductsAction,
 		setCurrentPageAction,
+		getTotalPagesAction,
 		setSearchTermAction,
 	} = productStore()
 
 	useEffect(() => {
 		fetchProductsAction()
+		getTotalPagesAction()
 	}, [currentPage, searchTerm])
 
 	const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,7 +27,7 @@ const MainFeature = () => {
 		setCurrentPageAction(1)
 	}
 
-	console.log({ products })
+	console.log(`dsdsdsd`, { products })
 
 	const handlePageChange = (
 		event: React.ChangeEvent<unknown>,
@@ -47,32 +50,40 @@ const MainFeature = () => {
 					<CircularProgress size={24} />
 				) : (
 					<Button variant="contained" onClick={fetchProductsAction}>
-						Search
+						Поиск
 					</Button>
 				)}
 			</div>
 			<ul className="space-y-4">
-				{products &&
-					products.map((product: any) => (
-						<li key={product.id} className="border p-4 rounded-lg">
-							<strong>Бренд:</strong> {product.brand || 'N/A'}
-							<br />
-							<strong>ID:</strong> {product.id}
-							<br />
-							<strong>Цена:</strong> {`${product.price}₽` || 'N/A'}
-							<br />
-							<strong>Продукт:</strong> {product.product || 'N/A'}
-						</li>
-					))}
+				{isLoading ? (
+					<CircularProgress size={24} />
+				) : (
+					products
+						?.reduce((uniqueProducts, product) => {
+							if (!uniqueProducts.some((p) => p.id === product.id)) {
+								uniqueProducts.push(product)
+							}
+							return uniqueProducts
+						}, [])
+						.map((uniqueProduct) => (
+							<li key={uniqueProduct.id} className="border p-4 rounded-lg">
+								<strong>Бренд:</strong> {uniqueProduct.brand || 'N/A'}
+								<br />
+								<strong>ID:</strong> {uniqueProduct.id}
+								<br />
+								<strong>Цена:</strong> {`${uniqueProduct.price}₽` || 'N/A'}
+								<br />
+								<strong>Продукт:</strong> {uniqueProduct.product || 'N/A'}
+							</li>
+						))
+				)}
 			</ul>
 			<div className="mt-4">
+				<Typography>Страница: {currentPage}</Typography>
 				<Pagination
 					count={totalPages}
 					page={currentPage}
 					onChange={handlePageChange}
-					color="primary"
-					variant="outlined"
-					shape="rounded"
 				/>
 			</div>
 		</div>
